@@ -27,6 +27,10 @@ for x in x_positions:
     for y in y_positions:
         positions.append((x,y))
 
+print("Press * to start checking for clicks...")
+keyboard.wait('*')  # Wait for space key to be pressed
+print("* key pressed, starting to check for clicks...")
+
 clicks=[]
 last_flash_time = None
 while not keyboard.is_pressed('q'):
@@ -38,7 +42,7 @@ while not keyboard.is_pressed('q'):
     if last_flash_time and time.time() - last_flash_time >= 3:
         for cl in clicks:
             click(cl[0], cl[1])
-        clicks=[]
-        last_flash_time = None
+        clicks=[]  
+        last_flash_time = None         
     time.sleep(0.1)  # Sleep to prevent high CPU usage
     print(f"Clicks: {clicks}")  # Debugging output to see the clicks being registered
