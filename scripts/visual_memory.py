@@ -43,7 +43,7 @@ def get_button_positions(round_number):
     elif round_number < 9:
         spacing = 130 - 60  
     else:
-        spacing = 130 - 90
+        spacing = 130 - 65
     x_positions = [800 + i * spacing for i in range(grid_size)]
     y_positions = [315 + i * spacing for i in range(grid_size)]
 
@@ -52,7 +52,7 @@ def get_button_positions(round_number):
 #3x3 -> 3*x=80
 #4x4 -> 4*x=60
 #5x5 -> 5*x=48
-
+print(get_button_positions(9))
 print("Press ] to start checking for clicks...")
 keyboard.wait("]")
 print("] key pressed, starting to check for clicks...")
