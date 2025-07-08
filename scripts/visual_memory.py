@@ -55,9 +55,9 @@ def get_button_positions(round_number):
 #4x4 -> 4*x=60
 #5x5 -> 5*x=48
 
-print("Press ',' to start checking for clicks...")
-keyboard.wait(',')  # Wait for space key to be pressed
-print(", key pressed, starting to check for clicks...")
+print("Press ] to start checking for clicks...")
+keyboard.wait("]")
+print("] key pressed, starting to check for clicks...")
 
 current_round_number = 1
 clicks=[]
@@ -73,7 +73,7 @@ while not keyboard.is_pressed('q'):
     if last_flash_time and time.time() - last_flash_time >= 3:
         for cl in clicks:
             click(cl[0],cl[1]) 
-        clicks=[],
+        clicks=[]
         last_flash_time=None
     time.sleep(0.3)
     current_round_number+=1
