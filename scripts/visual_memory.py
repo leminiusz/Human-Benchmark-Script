@@ -28,25 +28,22 @@ y_positions = [333,467,600]
 
 def get_grid_size(round_number):
     # Calculate the grid size based on the round number
-    #1-3 round 3x3 grid, 3-6 round 4x4 grid, 6-9 round 5x5 grid etc.
-    return 3 + ((round_number - 1) // 3)
+    #1-2 round 3x3 grid, 3-5 round 4x4 grid, 6-8 round 5x5 grid etc.
+    return 3 + (round_number // 3)
 
 def get_button_positions(round_number):
     positions=[]
     grid_size = get_grid_size(round_number)
     
     # Calculate spacing based on round ranges
-    if round_number <= 3:
+    if round_number < 3:
         spacing = 130
-    elif round_number <= 6:
+    elif round_number < 6:
         spacing = 130 - 30  
-    elif round_number <= 9:
+    elif round_number < 9:
         spacing = 130 - 60  
     else:
-        group = (round_number - 1) // 3
-        spacing = 100 - (group * 30)
-        if spacing < 20:  
-            spacing = 20
+        spacing = 130 - 90
     x_positions = [800 + i * spacing for i in range(grid_size)]
     y_positions = [315 + i * spacing for i in range(grid_size)]
 
@@ -87,23 +84,20 @@ while not keyboard.is_pressed('q'):
     # If no white buttons and we were showing pattern pattern is complete
     elif game_state == "showing_pattern" and not white_buttons:
         if not pattern_complete:
-            print(f"Round {current_round_number}: Pattern complete, sequence: {clicks}")
             pattern_complete = True
         game_state = "waiting_for_input"
     
     # After pattern is shown wait a bit then click the sequence
-    if game_state == "waiting_for_input" and last_flash_time and (time.time() - last_flash_time) >= 0.5:
-        print(f"Round {current_round_number}: Clicking sequence")
+    if game_state == "waiting_for_input" and last_flash_time and (time.time() - last_flash_time) >= 1.5:
         for cl in clicks:
             click(cl[0], cl[1])
-            time.sleep(0.05) 
+            time.sleep(0.1) 
+        
+       
+        time.sleep(1.0)  
         
         clicks = []
         current_round_number += 1  
-        game_state = "waiting"  # Reset to waiting immediately
+        game_state = "waiting"
         last_flash_time = None
-        print(f"Moving to round {current_round_number}")
-    
-    time.sleep(0.05)  
-    if len(clicks) > 0:  
-        print(f"Round: {current_round_number}, State: {game_state}, Clicks: {len(clicks)}")
+    time.sleep(0.1)  
