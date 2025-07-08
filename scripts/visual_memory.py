@@ -29,8 +29,11 @@ y_positions = [333,467,600]
 def get_grid_size(round_number):
     # Calculate the grid size based on the round number
     #1-2 round 3x3 grid, 3-5 round 4x4 grid, 6-8 round 5x5 grid etc.
-    return 3 + (round_number // 3)
-
+    if round_number<14:
+        return 3 + (round_number // 3)
+    else:
+        return 7
+    
 def get_button_positions(round_number):
     positions=[]
     grid_size = get_grid_size(round_number)
@@ -42,8 +45,10 @@ def get_button_positions(round_number):
         spacing = 130 - 30  
     elif round_number < 9:
         spacing = 130 - 60  
-    else:
+    elif round_number >= 9 and round_number < 14 :
         spacing = 130 - 65
+    else:
+        spacing = 130 - 78    
     x_positions = [800 + i * spacing for i in range(grid_size)]
     y_positions = [315 + i * spacing for i in range(grid_size)]
 
@@ -52,7 +57,8 @@ def get_button_positions(round_number):
 #3x3 -> 3*x=80
 #4x4 -> 4*x=60
 #5x5 -> 5*x=48
-print(get_button_positions(9))
+
+#print(get_button_positions(14))
 print("Press ] to start checking for clicks...")
 keyboard.wait("]")
 print("] key pressed, starting to check for clicks...")
@@ -92,7 +98,6 @@ while not keyboard.is_pressed('q'):
         for cl in clicks:
             click(cl[0], cl[1])
             time.sleep(0.1) 
-        
        
         time.sleep(1.0)  
         
