@@ -28,7 +28,8 @@ y_positions = [333,467,600]
 
 def get_grid_size(round_number):
     # Calculate the grid size based on the round number
-    return 3 + (round_number // 3)
+    #1-3 round 3x3 grid, 3-6 round 4x4 grid, 6-9 round 5x5 grid etc.
+    return 3 + ((round_number - 1) // 3)
 
 def get_button_positions(round_number):
     positions=[]
@@ -60,21 +61,49 @@ keyboard.wait("]")
 print("] key pressed, starting to check for clicks...")
 
 current_round_number = 1
-clicks=[]
+clicks = []
 last_flash_time = None
+game_state = "waiting"  # "showing_pattern", "waiting_for_input"
+pattern_complete = False
 
 while not keyboard.is_pressed('q'):
     positions = get_button_positions(current_round_number)
+    
+    #Check for flashing buttons
+    white_buttons = []
     for pos in positions:
-        if pyautogui.pixel(pos[0],pos[1])==clicked_color:
-            if len(clicks) == 0 or clicks[-1] != pos:
+        if pyautogui.pixel(pos[0], pos[1]) == clicked_color:
+            white_buttons.append(pos)
+    
+    # White buttons means we are in pattern showing case
+    if white_buttons:
+        for pos in white_buttons:
+            if pos not in clicks:
                 clicks.append(pos)
-                last_flash_time = time.time()
-    if last_flash_time and time.time() - last_flash_time >= 3:
+        last_flash_time = time.time()
+        game_state = "showing_pattern"
+        pattern_complete = False
+    
+    # If no white buttons and we were showing pattern pattern is complete
+    elif game_state == "showing_pattern" and not white_buttons:
+        if not pattern_complete:
+            print(f"Round {current_round_number}: Pattern complete, sequence: {clicks}")
+            pattern_complete = True
+        game_state = "waiting_for_input"
+    
+    # After pattern is shown wait a bit then click the sequence
+    if game_state == "waiting_for_input" and last_flash_time and (time.time() - last_flash_time) >= 0.5:
+        print(f"Round {current_round_number}: Clicking sequence")
         for cl in clicks:
-            click(cl[0],cl[1]) 
-        clicks=[]
-        last_flash_time=None
-    time.sleep(0.3)
-    current_round_number+=1
-    print(f"clicks: {clicks}")
+            click(cl[0], cl[1])
+            time.sleep(0.05) 
+        
+        clicks = []
+        current_round_number += 1  
+        game_state = "waiting"  # Reset to waiting immediately
+        last_flash_time = None
+        print(f"Moving to round {current_round_number}")
+    
+    time.sleep(0.05)  
+    if len(clicks) > 0:  
+        print(f"Round: {current_round_number}, State: {game_state}, Clicks: {len(clicks)}")
