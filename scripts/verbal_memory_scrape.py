@@ -25,7 +25,8 @@ def click(x, y):
     time.sleep(0.1)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
 
-
+click(1037,838)  # accept cookies button
+time.sleep(2)  # wait for the page to load
 click(950, 600)  # start button
 time.sleep(2)  # wait for the game to load
 
@@ -43,4 +44,8 @@ while not keyboard.is_pressed('q'):
         time.sleep(0.5)
     except:
         continue
+
+print("Script stopped, browser will remain open")
+input("Press Enter to close the browser...")  
+driver.quit()  
 
