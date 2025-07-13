@@ -1,9 +1,5 @@
-from bs4 import BeautifulSoup
-import requests
-import pyautogui
 import time
 import keyboard
-import random
 import win32api, win32con
 from selenium import webdriver
 from selenium.webdriver.common.by import By
