@@ -56,4 +56,6 @@ while not keyboard.is_pressed('q'):
         time.sleep(0.1)
     else:
         print("EROR - No number detected")
-    
+print("Script stopped, browser will remain open")
+input("Press Enter to close the browser...")  
+driver.quit()     

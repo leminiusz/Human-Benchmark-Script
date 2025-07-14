@@ -22,7 +22,7 @@ click(955, 434)  # start button
 time.sleep(0.1)  # wait for the game to load
 
 counter=0
-while not keyboard.is_pressed('q') or counter != 30:
+while not keyboard.is_pressed('q') and counter < 30:
     pic = pyautogui.screenshot(region=region)
     width, height = pic.size
     
@@ -37,8 +37,10 @@ while not keyboard.is_pressed('q') or counter != 30:
                 click(x + region[0], y + region[1])
                 counter +=1  
                 found_target = True
-                time.sleep(0.1)  
-                break
-    
+                time.sleep(0.05)  
+                break  
     # Small delay to prevent overwhelming the CPU
     time.sleep(0.01)
+print("Script stopped, browser will remain open")
+input("Press Enter to close the browser...")  
+driver.quit() 
