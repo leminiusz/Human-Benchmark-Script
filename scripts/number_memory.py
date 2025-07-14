@@ -29,11 +29,23 @@ while not keyboard.is_pressed('q'):
         screenshot.save("number_screen.png")
         reader = easyocr.Reader(['en'])
         results = reader.readtext("number_screen.png",allowlist='0123456789')
-        time.sleep(0.5)  # wait for the OCR to process
+        time.sleep(0.5)  
         #ocr zwraca wyniki listę krotek, gdzie pierwszy element to współrzędne, a drugi to tekst
         print("Wyniki OCR:", results)
     if results and pyautogui.pixel(1082, 350) == (255, 255, 255):
-        number_text = results[0][1]    
+        #Trzeba przesortowac wyniki według współrzędnych Y zeby laczylo dolna liczbe do gorej a nie na odwrót
+        sorted_results = sorted(results, key=lambda x: x[0][0][1])
+        
+        #
+        number_text = ""
+        for result in sorted_results:
+            #usuwamy jeszcze potencjalne spacje i znaki nowej linii, bo result[1] zawiera
+            # ale moga sie tam wkrasc jakies bledy w rozpoznaniu
+            text = result[1].replace(" ", "").replace("\n", "")
+            number_text += text
+        
+        print(f"Detected number: {number_text}")
+        
         click(847,435)#click to input the number
         time.sleep(0.1)  # wait for the input field to be ready
         pyautogui.write(number_text)
