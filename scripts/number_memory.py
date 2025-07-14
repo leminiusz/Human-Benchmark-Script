@@ -23,17 +23,17 @@ time.sleep(0.1)  # wait for the game to load
 
 while not keyboard.is_pressed('q'):
     # Click on the game area to start the number memory test
-    x,y, width, height = 475, 350, 965, 235
-    if pyautogui.pixel(918, 512) == (255, 255, 255): 
+    x,y, width, height = 475, 350, 1050, 250
+    if pyautogui.pixel(918, 512) == (255, 255, 255) or pyautogui.pixel(921, 561) == (39, 121, 188): 
         screenshot = pyautogui.screenshot(region=(x, y, width, height))
         screenshot.save("number_screen.png")
         reader = easyocr.Reader(['en'])
-        results = reader.readtext("number_screen.png")
+        results = reader.readtext("number_screen.png",allowlist='0123456789')
         time.sleep(0.5)  # wait for the OCR to process
         #ocr zwraca wyniki listę krotek, gdzie pierwszy element to współrzędne, a drugi to tekst
         print("Wyniki OCR:", results)
     if results and pyautogui.pixel(1082, 350) == (255, 255, 255):
-        number_text = results[0][1] 
+        number_text = results[0][1]    
         click(847,435)#click to input the number
         time.sleep(0.1)  # wait for the input field to be ready
         pyautogui.write(number_text)
