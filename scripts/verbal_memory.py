@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 driver = webdriver.Chrome()
-driver.set_window_size(1920, 1080)  # Set window size to full HD
+driver.maximize_window()  # Set window size to full HD
 #You can also set the window size to your monitor size
 #For example, if you have a 4K monitor, you can set it to
 #But for now you are gonna have to manually set the button positions
@@ -21,10 +21,10 @@ def click(x, y):
     time.sleep(0.1)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
 
-click(1037,838)  # accept cookies button
+click(1050,807)  # accept cookies button
 time.sleep(2)  # wait for the page to load
-click(950, 600)  # start button
-time.sleep(2)  # wait for the game to load
+click(955, 434)  # start button
+time.sleep(0.1)  # wait for the game to load
 
 while not keyboard.is_pressed('q'):
     try:

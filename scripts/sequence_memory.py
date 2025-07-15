@@ -3,12 +3,24 @@ import time
 import keyboard
 import random
 import win32api, win32con
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get("https://humanbenchmark.com/tests/sequence")
 
 def click(x, y):
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
     time.sleep(0.1)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
+
+click(1050,807)  # accept cookies button
+time.sleep(2)  # wait for the page to load
+click(949, 579)  # start button
+time.sleep(0.1)  # wait for the game to load
 
 #normal color of buttons 
 normal_color = (36, 114, 192)
@@ -27,9 +39,6 @@ for x in x_positions:
     for y in y_positions:
         positions.append((x,y))
 
-print("Press * to start checking for clicks...")
-keyboard.wait('*')  # Wait for space key to be pressed
-print("* key pressed, starting to check for clicks...")
 
 clicks=[]
 last_flash_time = None
@@ -46,3 +55,6 @@ while not keyboard.is_pressed('q'):
         last_flash_time = None         
     time.sleep(0.1)  # Sleep to prevent high CPU usage
     print(f"Clicks: {clicks}")  # Debugging output to see the clicks being registered
+print("Script stopped, browser will remain open")
+input("Press Enter to close the browser...")  
+driver.quit()     

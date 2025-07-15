@@ -27,20 +27,20 @@ while not keyboard.is_pressed('q') and counter < 30:
     width, height = pic.size
     
     found_target = False
-    for x in range(0, width, 5):  
+    for x in range(0, width, 10):  
         if found_target:
             break
-        for y in range(0, height, 5):
+        for y in range(0, height, 10):
             r, g, b = pic.getpixel((x, y))
             #check if the pixel color matches the target color
             if (r, g, b) == (149, 195, 232):
                 click(x + region[0], y + region[1])
                 counter +=1  
                 found_target = True
-                time.sleep(0.05)  
+                #time.sleep(0.01)  
                 break  
     # Small delay to prevent overwhelming the CPU
-    time.sleep(0.01)
+    #time.sleep(0.01)
 print("Script stopped, browser will remain open")
 input("Press Enter to close the browser...")  
 driver.quit() 
