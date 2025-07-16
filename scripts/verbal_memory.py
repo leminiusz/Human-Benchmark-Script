@@ -23,7 +23,7 @@ def click(x, y):
 
 click(1050,807)  # accept cookies button
 time.sleep(2)  # wait for the page to load
-click(955, 434)  # start button
+click(955, 586)  # start button
 time.sleep(0.1)  # wait for the game to load
 
 while not keyboard.is_pressed('q'):
