@@ -1,44 +1,34 @@
 import pyautogui
 import time
 import keyboard
-import random
-import win32api, win32con
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from common import as_tuple, click, create_driver, get_test_settings, start_test, wait_for_q_to_close
 
 
-driver = webdriver.Chrome()
-driver.maximize_window()
-driver.get("https://humanbenchmark.com/tests/reactiontime")
-
-def click(x, y):
-    win32api.SetCursorPos((x, y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-    time.sleep(0.1)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
-
-
-click(1050,807)  # accept cookies button
-time.sleep(2)  # wait for the page to load
-click(955, 434)  # start button
-time.sleep(0.1)  # wait for the game to load
+settings = get_test_settings("reaction_time_test")
+driver = create_driver(settings["url"])
+start_test(as_tuple(settings["start_button"]))
 #for me position is (456,374) CHANGE TO YOUR NEEDS
-x,y = 456,374
+x, y = as_tuple(settings["pixel_position"])
+colors = settings["colors"]
+armed_color = as_tuple(colors["armed"])
+waiting_color = as_tuple(colors["waiting"])
+go_color = as_tuple(colors["go"])
+stop_key = settings["stop_key"]
 counter = 0
-while not keyboard.is_pressed('q') and counter < 5:
+while not keyboard.is_pressed(stop_key) and counter < settings["max_rounds"]:
     current_color= pyautogui.pixel(x, y)
-    if current_color==(43,135,209):
+    if current_color == armed_color:
         click(x,y)
-        time.sleep(0.1)
-        while current_color==(206,58,34):
-            if keyboard.is_pressed('q'):    
+        time.sleep(settings["post_armed_click_wait_seconds"])
+        while current_color == waiting_color:
+            if keyboard.is_pressed(stop_key):
                 break
-        time.sleep(0.5)
-    elif current_color==(75,219,106):
+            current_color = pyautogui.pixel(x, y)
+        time.sleep(settings["post_round_wait_seconds"])
+    elif current_color == go_color:
             click(x,y)
             counter += 1
-            time.sleep(0.5)
-print("Script stopped, browser will remain open")
-input("Press Enter to close the browser...")  
-driver.quit()        
+            time.sleep(settings["post_round_wait_seconds"])
+
+wait_for_q_to_close(driver)
     

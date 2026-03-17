@@ -1,47 +1,34 @@
 import time
 import keyboard
-import win32api, win32con
-from selenium import webdriver
 from selenium.webdriver.common.by import By
+from common import as_tuple, click, create_driver, get_test_settings, start_test, wait_for_q_to_close
 
-driver = webdriver.Chrome()
-driver.maximize_window()  # Set window size to full HD
+settings = get_test_settings("verbal_memory")
+driver = create_driver(settings["url"])
 #You can also set the window size to your monitor size
 #For example, if you have a 4K monitor, you can set it to
 #But for now you are gonna have to manually set the button positions
 #In the future I want to use pyautogui for the same task by that I mean pyautogui and some kind of image to string
 # recognition to click the buttons based on the images of the buttons
-driver.get("https://humanbenchmark.com/tests/verbal-memory")
 
 seen_words = []
+start_test(as_tuple(settings["start_button"]))
+stop_key = settings["stop_key"]
 
-def click(x, y):
-    win32api.SetCursorPos((x, y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-    time.sleep(0.1)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
-
-click(1050,807)  # accept cookies button
-time.sleep(2)  # wait for the page to load
-click(955, 586)  # start button
-time.sleep(0.1)  # wait for the game to load
-
-while not keyboard.is_pressed('q'):
+while not keyboard.is_pressed(stop_key):
     try:
         word_element = driver.find_element(By.CLASS_NAME, "word")
         word = word_element.text.strip()
         
         if word in seen_words:
-            click(882, 522)  # seen button
+            click(*as_tuple(settings["seen_button"]))
         else:
             seen_words.append(word)
-            click(1024, 522)  # new button
+            click(*as_tuple(settings["new_button"]))
         
-        time.sleep(0.5)
+        time.sleep(settings["loop_sleep_seconds"])
     except:
         continue
 
-print("Script stopped, browser will remain open")
-input("Press Enter to close the browser...")  
-driver.quit()  
+wait_for_q_to_close(driver)
 

@@ -1,6 +1,5 @@
-beautifulsoup4==4.12.2
-requests==2.31.0
-pyautogui==0.9.54
+easyocr==1.7.2
 keyboard==0.13.5
+pyautogui==0.9.54
 pywin32==306
 selenium==4.15.2

@@ -1,56 +1,39 @@
 import pyautogui
 import time
 import keyboard
-import random
-import win32api, win32con
+from common import as_tuple, click, get_test_settings
 
-def click(x, y):
-    win32api.SetCursorPos((x, y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-    time.sleep(0.1)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
-
-#normal color of buttons 
-normal_color = (36, 114, 192)
+settings = get_test_settings("visual_memory")
 
 #Color of correctly clicked button(white)
-clicked_color = (255, 255, 255)
+clicked_color = as_tuple(settings["clicked_color"])
 
 #now its harder because every modulo 3 round the size of the grid increases by one row and column
 #so the first and second round have 3x3 grid, the third and fourth round have 4x4 grid, etc.
 #so i think about we have to get by how much grid size changes every 3 rounds
 #and we then can calculate the different positions of the buttons every 3 rounds
 
-#default positions of the buttons
-#these are the positions of the buttons in the first and second round
-x_positions = [815,945,1083]
-y_positions = [333,467,600]
-
 def get_grid_size(round_number):
     # Calculate the grid size based on the round number
     #1-2 round 3x3 grid, 3-5 round 4x4 grid, 6-8 round 5x5 grid etc.
-    if round_number<14:
+    if round_number < settings["max_grid_size_round"]:
         return 3 + (round_number // 3)
     else:
-        return 7
+        return settings["max_grid_size"]
     
 def get_button_positions(round_number):
     positions=[]
     grid_size = get_grid_size(round_number)
     
     # Calculate spacing based on round ranges
-    if round_number < 3:
-        spacing = 130
-    elif round_number < 6:
-        spacing = 130 - 30  
-    elif round_number < 9:
-        spacing = 130 - 60  
-    elif round_number >= 9 and round_number < 14 :
-        spacing = 130 - 65
-    else:
-        spacing = 130 - 78    
-    x_positions = [800 + i * spacing for i in range(grid_size)]
-    y_positions = [315 + i * spacing for i in range(grid_size)]
+    spacing = settings["spacing_rules"][-1]["spacing"]
+    for rule in settings["spacing_rules"]:
+        if round_number < rule["max_round_exclusive"]:
+            spacing = rule["spacing"]
+            break
+
+    x_positions = [settings["grid_base_x"] + i * spacing for i in range(grid_size)]
+    y_positions = [settings["grid_base_y"] + i * spacing for i in range(grid_size)]
 
     return [(a,b) for b in y_positions for a in x_positions]
 
@@ -60,7 +43,7 @@ def get_button_positions(round_number):
 
 #print(get_button_positions(14))
 print("Press ] to start checking for clicks...")
-keyboard.wait("]")
+keyboard.wait(settings["start_key"])
 print("] key pressed, starting to check for clicks...")
 
 current_round_number = 1
@@ -69,7 +52,7 @@ last_flash_time = None
 game_state = "waiting"  # "showing_pattern", "waiting_for_input"
 pattern_complete = False
 
-while not keyboard.is_pressed('q'):
+while not keyboard.is_pressed(settings["stop_key"]):
     positions = get_button_positions(current_round_number)
     
     #Check for flashing buttons
@@ -94,15 +77,15 @@ while not keyboard.is_pressed('q'):
         game_state = "waiting_for_input"
     
     # After pattern is shown wait a bit then click the sequence
-    if game_state == "waiting_for_input" and last_flash_time and (time.time() - last_flash_time) >= 1.5:
+    if game_state == "waiting_for_input" and last_flash_time and (time.time() - last_flash_time) >= settings["pattern_delay_seconds"]:
         for cl in clicks:
             click(cl[0], cl[1])
-            time.sleep(0.1) 
+            time.sleep(settings["post_click_wait_seconds"])
        
-        time.sleep(1.0)  
+        time.sleep(settings["post_round_wait_seconds"])
         
         clicks = []
         current_round_number += 1  
         game_state = "waiting"
         last_flash_time = None
-    time.sleep(0.1)  
+    time.sleep(settings["loop_sleep_seconds"])

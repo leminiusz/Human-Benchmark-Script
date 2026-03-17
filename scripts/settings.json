@@ -1,0 +1,119 @@
+{
+  "common": {
+    "cookie_button_position": [1050, 807],
+    "cookie_wait_seconds": 2,
+    "post_start_wait_seconds": 0.1,
+    "click_hold_seconds": 0.1,
+    "close_key": "q"
+  },
+  "aim_trainer": {
+    "url": "https://humanbenchmark.com/tests/aim",
+    "start_button": [955, 434],
+    "scan_region": [467, 250, 970, 540],
+    "scan_step": 10,
+    "target_color": [149, 195, 232],
+    "max_hits": 30,
+    "stop_key": "q"
+  },
+  "reaction_time_test": {
+    "url": "https://humanbenchmark.com/tests/reactiontime",
+    "start_button": [955, 434],
+    "pixel_position": [456, 374],
+    "colors": {
+      "armed": [43, 135, 209],
+      "waiting": [206, 58, 34],
+      "go": [75, 219, 106]
+    },
+    "max_rounds": 5,
+    "post_armed_click_wait_seconds": 0.1,
+    "post_round_wait_seconds": 0.5,
+    "stop_key": "q"
+  },
+  "chimpanzee_test": {
+    "url": "https://humanbenchmark.com/tests/chimp",
+    "start_button": [955, 596],
+    "ocr_region": [500, 170, 940, 532],
+    "ocr_scale": 3,
+    "ocr_image": "chimp_screen.png",
+    "ocr_allowlist": "0123456789",
+    "ocr_width_ths": 0.7,
+    "ocr_height_ths": 0.7,
+    "ocr_paragraph": false,
+    "ocr_confidence_threshold": 0.5,
+    "use_gpu": true,
+    "expected_start_numbers": 4,
+    "between_number_clicks_seconds": 0.1,
+    "next_round_wait_seconds": 2,
+    "continue_button": [931, 564],
+    "idle_wait_seconds": 0.1,
+    "stop_key": "q"
+  },
+  "number_memory": {
+    "url": "https://humanbenchmark.com/tests/number-memory",
+    "start_button": [955, 596],
+    "white_color": [255, 255, 255],
+    "white_tolerance": 20,
+    "ocr_region": [440, 300, 1050, 270],
+    "ocr_image": "number_screen.png",
+    "ocr_allowlist": "0123456789",
+    "ocr_confidence_threshold": 0.45,
+    "ocr_max_length_delta": 1,
+    "expected_start_length": 1,
+    "force_ocr_every_seconds": 0.8,
+    "show_number_pixels": [[913, 493], [913, 542], [915, 502]],
+    "input_ready_pixel": [832, 338],
+    "input_click": [847, 436],
+    "submit_button": [941, 531],
+    "next_button": [945, 592],
+    "post_ocr_wait_seconds": 0.2,
+    "input_wait_seconds": 0.1,
+    "loop_sleep_seconds": 0.05,
+    "stop_key": "q"
+  },
+  "sequence_memory": {
+    "url": "https://humanbenchmark.com/tests/sequence",
+    "start_button": [949, 579],
+    "clicked_color": [255, 255, 255],
+    "x_positions": [815, 945, 1083],
+    "y_positions": [333, 467, 600],
+    "flash_timeout_seconds": 3,
+    "loop_sleep_seconds": 0.1,
+    "stop_key": "q"
+  },
+  "typing_test": {
+    "url": "https://humanbenchmark.com/tests/typing",
+    "typing_area": [486, 465],
+    "ready_color": [234, 243, 250],
+    "type_interval": 0,
+    "loop_sleep_seconds": 0.1,
+    "stop_key": "q"
+  },
+  "verbal_memory": {
+    "url": "https://humanbenchmark.com/tests/verbal-memory",
+    "start_button": [955, 600],
+    "seen_button": [882, 522],
+    "new_button": [1024, 522],
+    "loop_sleep_seconds": 0.5,
+    "stop_key": "q"
+  },
+  "visual_memory": {
+    "clicked_color": [255, 255, 255],
+    "start_key": "]",
+    "stop_key": "q",
+    "loop_sleep_seconds": 0.1,
+    "post_click_wait_seconds": 0.1,
+    "post_round_wait_seconds": 1.0,
+    "pattern_delay_seconds": 1.5,
+    "grid_base_x": 800,
+    "grid_base_y": 315,
+    "spacing_rules": [
+      {"max_round_exclusive": 3, "spacing": 130},
+      {"max_round_exclusive": 6, "spacing": 100},
+      {"max_round_exclusive": 9, "spacing": 70},
+      {"max_round_exclusive": 14, "spacing": 65},
+      {"max_round_exclusive": 9999, "spacing": 52}
+    ],
+    "max_grid_size_round": 14,
+    "max_grid_size": 7
+  }
+}
